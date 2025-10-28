@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Stoppable Sound</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .icon-button {
+            background-color: #8e081e;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+        .icon-button:hover {
+            background-color: #d6d30c;
+        }
+    </style>
+</head>
+<body>
+    <button class="icon-button" id="startSound">Welcome</button>
+    <script>
+        let audioContext;
+        let source;
+        let gainNode;
+
+        document.getElementById('startSound').addEventListener('click', async () => {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const response = await fetch('music.m4a');
+            const arrayBuffer = await response.arrayBuffer();
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+            source = audioContext.createBufferSource();
+            source.buffer = audioBuffer;
+            source.loop = true;
+
+            gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Set initial volume to 1 (max)
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            source.start(0);
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause audio when the tab is hidden
+                if (source) {
+                    source.stop();
+                }
+            } else {
+                // Resume audio when the tab is visible
+                if (source) {
+                    source.start(0);
+                }
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (source) {
+                source.start(0);
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            if (source) {
+                source.start(0);
+            }
+        });
+    </script>
+</body>
+</html>
