@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Non-Stoppable Sound</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .icon-button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+        .icon-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <audio id="backgroundAudio" src="music.m4a" preload="auto" loop muted></audio>
+    <button class="icon-button" id="startSound">Welcome</button>
+    <audio id="backgroundAudio" src="music.m4a" preload="auto" loop></audio>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('startSound').addEventListener('click', () => {
             const audio = document.getElementById('backgroundAudio');
-            audio.muted = false; // Unmute the audio after the page loads
             audio.play().catch(error => {
                 console.error('Error playing audio:', error);
             });
