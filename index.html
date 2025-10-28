@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Stoppable Sound</title>
+</head>
+<body>
+    <audio id="backgroundAudio" src="music.m4a" preload="auto" loop muted></audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const audio = document.getElementById('backgroundAudio');
+            audio.muted = false; // Unmute the audio after the page loads
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Pause audio when the tab is hidden
+                const audio = document.getElementById('backgroundAudio');
+                audio.pause();
+            } else {
+                // Resume audio when the tab is visible
+                const audio = document.getElementById('backgroundAudio');
+                audio.play().catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            const audio = document.getElementById('backgroundAudio');
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
+        });
+
+        window.addEventListener('blur', () => {
+            const audio = document.getElementById('backgroundAudio');
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
+        });
+    </script>
+</body>
+</html>
